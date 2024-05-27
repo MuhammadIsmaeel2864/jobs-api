@@ -32,7 +32,9 @@ app.use(rateLimiter({
   max: 60,
 }))
 
-
+app.get('/', (req, res) => {
+  res.send('jobs api')
+})
 
 // extra packages
 
