@@ -2,100 +2,101 @@ openapi: 3.0.0
 info:
   title: 06-JOBS-API
   contact: {}
-  version: '1.0'
+  version: "1.0"
 servers:
-- url: https://jobs-api-2864-3c68b238e244.herokuapp.com/api/v1
-  variables: {}
+  # - url: https://jobs-api-2864-3c68b238e244.herokuapp.com/api/v1
+  - url: http://localhost:3000/api/v1
+    variables: {}
 paths:
   /auth/register:
     post:
       tags:
-      - Auth
+        - Auth
       summary: Register User
       operationId: RegisterUser
       parameters: []
       requestBody:
-        description: ''
+        description: ""
         content:
           application/json:
             schema:
               allOf:
-              - $ref: '#/components/schemas/RegisterUserRequest'
-              - example:
-                  password: ismaeel
+                - $ref: "#/components/schemas/RegisterUserRequest"
+                - example:
+                    password: ismaeel
             example:
               password: ismaeel
         required: true
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           headers: {}
       deprecated: false
       security: []
   /auth/login:
     post:
       tags:
-      - Auth
+        - Auth
       summary: Login
       operationId: Login
       parameters: []
       requestBody:
-        description: ''
+        description: ""
         content:
           application/json:
             schema:
               allOf:
-              - $ref: '#/components/schemas/LoginRequest'
-              - example:
-                  email: ismaeel@gmail.com
-                  password: ismaeel
+                - $ref: "#/components/schemas/LoginRequest"
+                - example:
+                    email: ismaeel@gmail.com
+                    password: ismaeel
             example:
               email: ismaeel@gmail.com
               password: ismaeel
         required: true
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           headers: {}
       deprecated: false
       security: []
   /jobs:
     post:
       tags:
-      - Jobs
+        - Jobs
       summary: Create Job
       operationId: CreateJob
       parameters: []
       requestBody:
-        description: ''
+        description: ""
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateJobRequest'
+              $ref: "#/components/schemas/CreateJobRequest"
             example:
               company: Random
               position: FullStack
         required: true
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           headers: {}
       deprecated: false
       security:
-      - bearer: []
+        - bearer: []
     get:
       tags:
-      - Jobs
+        - Jobs
       summary: Get All Jobs
       operationId: GetAllJobs
       parameters: []
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           headers: {}
       deprecated: false
       security:
-      - bearer: []
+        - bearer: []
   /jobs/{id}:
     parameters:
       - in: path
@@ -106,63 +107,63 @@ paths:
         description: The job ID
     get:
       tags:
-      - Jobs
+        - Jobs
       summary: Get Single Job
       operationId: GetSingleJob
       parameters: []
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           headers: {}
       deprecated: false
       security:
-      - bearer: []
+        - bearer: []
     patch:
       tags:
-      - Jobs
+        - Jobs
       summary: Update a Job
       operationId: UpdateJob
       parameters: []
       requestBody:
-        description: ''
+        description: ""
         content:
           application/json:
             schema:
               allOf:
-              - $ref: '#/components/schemas/UpdateJobRequest'
-              - example:
-                  company: Random
-                  position: FullStack
+                - $ref: "#/components/schemas/UpdateJobRequest"
+                - example:
+                    company: Random
+                    position: FullStack
             example:
               company: Random
               position: FullStack
         required: true
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           headers: {}
       deprecated: false
       security:
-      - bearer: []
+        - bearer: []
     delete:
       tags:
-      - Jobs
+        - Jobs
       summary: Delete Job
       operationId: DeleteJob
       parameters: []
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
           headers: {}
       deprecated: false
       security:
-      - bearer: []
+        - bearer: []
 components:
   schemas:
     RegisterUserRequest:
       title: RegisterUserRequest
       required:
-      - password
+        - password
       type: object
       properties:
         password:
@@ -172,8 +173,8 @@ components:
     LoginRequest:
       title: LoginRequest
       required:
-      - email
-      - password
+        - email
+        - password
       type: object
       properties:
         email:
@@ -186,8 +187,8 @@ components:
     CreateJobRequest:
       title: CreateJobRequest
       required:
-      - company
-      - position
+        - company
+        - position
       type: object
       properties:
         company:
@@ -200,8 +201,8 @@ components:
     UpdateJobRequest:
       title: UpdateJobRequest
       required:
-      - company
-      - position
+        - company
+        - position
       type: object
       properties:
         company:
@@ -217,7 +218,7 @@ components:
       scheme: bearer
 security: []
 tags:
-- name: Auth
-  description: ''
-- name: Jobs
-  description: ''
+  - name: Auth
+    description: ""
+  - name: Jobs
+    description: ""
