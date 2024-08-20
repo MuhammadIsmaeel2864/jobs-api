@@ -1,27 +1,30 @@
-const User = require('../models/User')
 const jwt = require('jsonwebtoken')
-const {UnauthenticatedError} = require('../errors')
+const { UnauthenticatedError } = require('../errors')
 
-const auth = (req, res, next) => {
-    //Check Headers
-    const authHeader = req.headers.authorization
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        throw new UnauthenticatedError('Authentication Invalid')
+const authenticateUser = (req, res, next) => {
+  const authHeader = req.headers.authorization
+  console.log('Authorization Header:', authHeader)
+
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    throw new UnauthenticatedError('Authentication Invalid')
+  }
+
+  const token = authHeader.split(' ')[1]
+  console.log('Token', token)
+
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET)
+    console.log('Payload', payload)
+
+    req.user = {
+      userId: payload.userId,
+      name: payload.name,
+      role: payload.role,
     }
-
-    const token = authHeader.split(' ')[1]
-
-    try {
-        const payload = jwt.verify(token, process.env.JWT_SECRET)
-
-        //attach user to the job Routes
-        req.user = { userId: payload.userId, name: payload.name }
-        next()
-
-    } catch (error) {
-        throw new UnauthenticatedError('Authentication Invalid')
-
-    }
+    next()
+  } catch (error) {
+    throw new UnauthenticatedError('Authentication Invalid')
+  }
 }
 
-module.exports = auth
+module.exports = authenticateUser
