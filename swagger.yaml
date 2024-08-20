@@ -1,175 +1,39 @@
 openapi: 3.0.0
 info:
   title: 06-JOBS-API
-  contact: {}
-  version: "1.0"
+  version: '1.0'
 servers:
-  # - url: https://jobs-api-2864-3c68b238e244.herokuapp.com/api/v1
   - url: http://localhost:3000/api/v1
-    variables: {}
-paths:
-  /auth/register:
-    post:
-      tags:
-        - Auth
-      summary: Register User
-      operationId: RegisterUser
-      parameters: []
-      requestBody:
-        description: ""
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: "#/components/schemas/RegisterUserRequest"
-                - example:
-                    password: ismaeel
-            example:
-              password: ismaeel
-        required: true
-      responses:
-        "200":
-          description: ""
-          headers: {}
-      deprecated: false
-      security: []
-  /auth/login:
-    post:
-      tags:
-        - Auth
-      summary: Login
-      operationId: Login
-      parameters: []
-      requestBody:
-        description: ""
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: "#/components/schemas/LoginRequest"
-                - example:
-                    email: ismaeel@gmail.com
-                    password: ismaeel
-            example:
-              email: ismaeel@gmail.com
-              password: ismaeel
-        required: true
-      responses:
-        "200":
-          description: ""
-          headers: {}
-      deprecated: false
-      security: []
-  /jobs:
-    post:
-      tags:
-        - Jobs
-      summary: Create Job
-      operationId: CreateJob
-      parameters: []
-      requestBody:
-        description: ""
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateJobRequest"
-            example:
-              company: Random
-              position: FullStack
-        required: true
-      responses:
-        "200":
-          description: ""
-          headers: {}
-      deprecated: false
-      security:
-        - bearer: []
-    get:
-      tags:
-        - Jobs
-      summary: Get All Jobs
-      operationId: GetAllJobs
-      parameters: []
-      responses:
-        "200":
-          description: ""
-          headers: {}
-      deprecated: false
-      security:
-        - bearer: []
-  /jobs/{id}:
-    parameters:
-      - in: path
-        name: id
-        required: true
-        schema:
-          type: string
-        description: The job ID
-    get:
-      tags:
-        - Jobs
-      summary: Get Single Job
-      operationId: GetSingleJob
-      parameters: []
-      responses:
-        "200":
-          description: ""
-          headers: {}
-      deprecated: false
-      security:
-        - bearer: []
-    patch:
-      tags:
-        - Jobs
-      summary: Update a Job
-      operationId: UpdateJob
-      parameters: []
-      requestBody:
-        description: ""
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: "#/components/schemas/UpdateJobRequest"
-                - example:
-                    company: Random
-                    position: FullStack
-            example:
-              company: Random
-              position: FullStack
-        required: true
-      responses:
-        "200":
-          description: ""
-          headers: {}
-      deprecated: false
-      security:
-        - bearer: []
-    delete:
-      tags:
-        - Jobs
-      summary: Delete Job
-      operationId: DeleteJob
-      parameters: []
-      responses:
-        "200":
-          description: ""
-          headers: {}
-      deprecated: false
-      security:
-        - bearer: []
+
 components:
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     RegisterUserRequest:
       title: RegisterUserRequest
       required:
+        - name
+        - email
         - password
+        - role
       type: object
       properties:
+        name:
+          type: string
+        email:
+          type: string
         password:
           type: string
+        role:
+          type: string
       example:
-        password: ismaeel
+        name: admin
+        email: admin@gmail.com
+        password: admin
+        role: admin
     LoginRequest:
       title: LoginRequest
       required:
@@ -212,13 +76,122 @@ components:
       example:
         company: Random
         position: FullStack
-  securitySchemes:
-    bearer:
-      type: http
-      scheme: bearer
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Register User
+      operationId: RegisterUser
+      security:
+        - bearer: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUserRequest'
+        required: true
+      responses:
+        '200':
+          description: User registered successfully
+
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login
+      operationId: Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      responses:
+        '200':
+          description: Login successful
+      security: []
+
+  /jobs:
+    post:
+      tags:
+        - Jobs
+      summary: Create Job
+      operationId: CreateJob
+      security:
+        - bearer: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateJobRequest'
+        required: true
+      responses:
+        '200':
+          description: Job created successfully
+
+    get:
+      tags:
+        - Jobs
+      summary: Get All Jobs
+      operationId: GetAllJobs
+      security:
+        - bearer: []
+      responses:
+        '200':
+          description: Retrieved all jobs
+
+  /jobs/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The job ID
+    get:
+      tags:
+        - Jobs
+      summary: Get Single Job
+      operationId: GetSingleJob
+      security:
+        - bearer: []
+      responses:
+        '200':
+          description: Retrieved single job
+
+    patch:
+      tags:
+        - Jobs
+      summary: Update a Job
+      operationId: UpdateJob
+      security:
+        - bearer: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateJobRequest'
+        required: true
+      responses:
+        '200':
+          description: Job updated successfully
+
+    delete:
+      tags:
+        - Jobs
+      summary: Delete Job
+      operationId: DeleteJob
+      security:
+        - bearer: []
+      responses:
+        '200':
+          description: Job deleted successfully
+
 security: []
 tags:
   - name: Auth
-    description: ""
+    description: ''
   - name: Jobs
-    description: ""
+    description: ''
